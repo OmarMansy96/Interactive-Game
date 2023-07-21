@@ -2,11 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class Player : MonoBehaviour
 {
 
-    public GameObject player;
-    public float hAxis,vAxis,moveSpeed, runSpeed,jump;
+    public CharacterController player;
+    public float hAxis,vAxis,moveSpeed, runSpeed, jump=5f;
     private Vector3 movement;
     Rigidbody rb;
     public Animator anim;
@@ -16,7 +17,6 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
 
-     
         
         
     }
@@ -29,28 +29,43 @@ public class Player : MonoBehaviour
        
         Move();
 
-        
 
     }
+
+
+
+
     void Move()
     {
-        movement.z = vAxis;
-        if( Input.GetKey(KeyCode.LeftShift))
-        {
-            transform.Translate(new Vector3(movement.x, movement.y, movement.z) * runSpeed * Time.deltaTime);
-            anim.SetFloat("fastRun", vAxis);
-            anim.SetTrigger("sheft");
-        }
-       
-            transform.Translate(new Vector3(movement.x, movement.y, movement.z) * moveSpeed * Time.deltaTime);
-            anim.SetFloat("run",vAxis);
+        //movement = new Vector3(hAxis, movement.y, vAxis);
 
-            transform.Rotate(0,hAxis,0);
+        movement.z = vAxis;
+
        
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            rb.AddForce(new Vector3(0, jump, 0));
-            anim.SetTrigger("jump");
-        }
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                transform.Translate(movement.x,0f,movement.z * runSpeed * Time.deltaTime);
+                
+            }
+                transform.Translate(movement.x, 0f, movement.z * moveSpeed * Time.deltaTime);
+                anim.SetFloat("run", vAxis);
+                transform.Rotate(0, hAxis, 0);
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                rb.AddForce(new Vector3(0, jump, 0));
+
+                movement.y = jump * Time.deltaTime;
+
+                anim.SetTrigger("jump");
+            }
+        
+
+
     }
+  
+
+
+
+
 }
